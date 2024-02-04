@@ -1,9 +1,9 @@
 import { Locator, Page, expect } from "@playwright/test";
-import { BaseQueries } from "./baseQueries";
-import { ProductDetails } from "./ProductListPage";
 
-export class SummaryPage {
+export class FullBagPage {
   readonly page: Page;
+  private readonly bagIcon: Locator;
+  private readonly viewFullBag: Locator;
   private readonly productName: Locator;
   private readonly productFit: Locator;
   private readonly productColourAndSize: Locator;
@@ -11,12 +11,13 @@ export class SummaryPage {
   private readonly priceTotal: Locator;
   private readonly priceSubtotal: Locator;
   private readonly checkoutButton: Locator;
-  private readonly closeRegionSelectionX: Locator;
-  private readonly closeYourBagSummaryX: Locator;
-
 
   constructor(page: Page) {
     this.page = page;
+    this.bagIcon = page.locator(
+      "button[data-locator-id=header-miniBag-select]"
+    );
+    this.viewFullBag = page.getByRole("link", { name: "View full bag" });
     this.productName = page.locator('*[class^="product-card_title"]');
     this.productFit = page.locator(
       '*[class^="product-card_featured-selection"]'
@@ -27,23 +28,27 @@ export class SummaryPage {
     this.priceOneProduct = page.locator(
       '*[class^="price_price"]'
     );
-    this.priceSubtotal = page.locator('div[class^="summary_summary-info-wrapper"]:not([class*="--bold"])');
     this.priceTotal = page.locator(
-      'p[data-locator-id^="miniBag-totalValue-read"]'
+      'div[class^="cart-page_right"] p[data-locator-id^="bag-totalValue-read"]'
     );
-    this.checkoutButton = page.getByRole("link", {
-      name: "Checkout securely ",
-    });
-    this.closeRegionSelectionX = page.locator(
-      "button[data-locator-id=storeSelector-close-select]"
+    this.priceSubtotal = page.locator(
+      'div[class^="cart-page_right"] div[class^="summary_summary-info-wrapper"]:not([class*="--bold"])'
     );
-    this.closeYourBagSummaryX = page.locator(
-      "button[data-locator-id=miniBag-closeButton-select]"
-    );
+    this.checkoutButton = page.getByRole("link", { name: "Checkout securely" });
   }
 
-  async verifyItemOnSummaryPage(productDetails: ProductDetails) {
-    expect(await this.checkoutButton).toBeVisible()
+  async clickOnBasket() {
+    await this.bagIcon.click();
+  }
+
+  async clickViewFullBag() {
+    await this.viewFullBag.click();
+  }
+
+  async verifyItemOnFullBagPage(productDetails) {
+    await this.clickOnBasket();
+    await this.clickViewFullBag();
+    expect(this.checkoutButton).toBeVisible();
     expect(await this.productName.textContent()).toBe(productDetails.productName);
     expect((await this.productFit.textContent())?.toLowerCase()).toBe(productDetails.productFit);
     expect(await this.productColourAndSize.textContent()).toContain(
@@ -53,12 +58,7 @@ export class SummaryPage {
       productDetails.productSize
     );
     expect(await this.priceOneProduct.textContent()).toBe(productDetails.productPrice)
-    expect(await this.priceTotal.textContent()).toBe(productDetails.productPrice)
     expect((await this.priceSubtotal.textContent())?.split("Subtotal")[1]).toBe(productDetails.productPrice)
-  }
-
-  async closeSummary() {
-    await this.closeRegionSelectionX.click()
-    await this.closeYourBagSummaryX.click();
+    expect(await this.priceTotal.textContent()).toBe(productDetails.productPrice)
   }
 }

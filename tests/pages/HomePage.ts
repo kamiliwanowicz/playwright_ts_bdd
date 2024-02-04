@@ -13,9 +13,6 @@ export class HomePage {
   private readonly accessoriesShopAll: Locator;
   private readonly accessoriesNewReleases: Locator;
   private readonly itemsList: Locator;
-  private readonly productFit: Locator;
-  private readonly productColour: Locator;
-  private readonly productPrice: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -39,11 +36,6 @@ export class HomePage {
       "section[id='panel-accessories'] a[title='New Releases']"
     );
     this.itemsList = page.locator('*[class^="product-grid_grid"]');
-    this.productFit = page.locator('*[class^="product-card_product-fit"]');
-    this.productColour = page.locator(
-      '*[class^="product-card_product-colour"]'
-    );
-    this.productPrice = page.locator('*[class^="product-card_product-price"]');
   }
 
   async goToHomepage() {

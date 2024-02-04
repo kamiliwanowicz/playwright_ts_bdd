@@ -1,10 +1,11 @@
 import { Locator, Page, expect } from "@playwright/test";
 
-interface ProductDetails {
+export interface ProductDetails {
   productName: string | null;
   productFit: string | null;
   productColour: string | null;
   productPrice: string | null;
+  productSize?: string | null;
 }
 
 export class ProductListPage {
@@ -14,7 +15,6 @@ export class ProductListPage {
   private readonly productFit: Locator;
   private readonly productColour: Locator;
   private readonly productPrice: Locator;
-  private readonly image: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -33,19 +33,25 @@ export class ProductListPage {
   }
 
   async getProductName(productCard: Locator) {
-    return productCard.locator(this.productTitle).textContent();
+    return await productCard.locator(this.productTitle).textContent();
   }
 
-  async getProductFit(productCard: Locator) {
-    return productCard.locator(this.productFit).textContent();
+  async getProductFit(productCard: Locator): Promise<string | null> {
+    try {
+      await expect(productCard.locator(this.productFit)).toBeVisible({ timeout: 1000 })
+      return await productCard.locator(this.productFit).textContent();
+    }
+    catch (error) {
+      return ""
+    }
   }
 
   async getProductColour(productCard: Locator) {
-    return productCard.locator(this.productColour).textContent();
+    return await productCard.locator(this.productColour).textContent();
   }
 
   async getProductPrice(productCard: Locator) {
-    return productCard.locator(this.productPrice).textContent();
+    return await productCard.locator(this.productPrice).textContent();
   }
 
   async clickOnProduct(productCard: Locator) {
