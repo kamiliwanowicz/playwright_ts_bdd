@@ -1,0 +1,15 @@
+{
+"configurations": [
+
+{
+  "name": "DebugMode",
+  "type": "node",
+  "request": "launch",
+  "program": "${workspaceRoot}/node_modules/@cucumber/cucumber/bin/cucumber-js",
+  "args": [
+      "${workspaceRoot}/features/*.feature",
+      "--tags", "@debug"
+  ]
+}
+]
+}

@@ -1,10 +1,5 @@
-import { test, expect } from "../fixtures/fixtures";
-import { FullBagPage } from "./pages/FullBagPage";
-import { ProductListPage } from "./pages/ProductListPage";
-import { ProductPage } from "./pages/ProductPage";
-import { SummaryPage } from "./pages/SummaryPage";
-import { HomePage } from "./pages/HomePage";
-import { CheckoutPage } from "./pages/CheckoutPage";
+import { test } from "../fixtures/fixtures";
+
 
 test("Gymshark - add a random item to basket and verify item details", async ({
   homePage,
