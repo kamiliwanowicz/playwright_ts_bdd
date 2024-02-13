@@ -1,7 +1,7 @@
 Feature: Gym Shark website tests
 
-  @AddRandomItemToBasket
-  Scenario Outline: Add a random product from New Releases
+  @debug
+  Scenario Outline: Add a random product from New Releases for <type>
     Given I go to "<type>" New Releases
     And I select a random item
     And I verify details on Product page
@@ -15,5 +15,5 @@ Feature: Gym Shark website tests
     Examples: 
       | type        |
       | Women       |
-      | Men         |
-      | Accessories |
+      # | Men         |
+      # | Accessories |

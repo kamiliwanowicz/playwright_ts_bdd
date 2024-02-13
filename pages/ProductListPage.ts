@@ -21,9 +21,7 @@ export class ProductListPage {
     this.itemsList = page.locator('*[class^="product-grid_grid"] article');
     this.productTitle = page.locator('*[class^="product-card_product-title"]');
     this.productFit = page.locator('*[class^="product-card_product-fit"]');
-    this.productColour = page.locator(
-      '*[class^="product-card_product-colour"]'
-    );
+    this.productColour = page.locator('*[class^="product-card_product-colour"]');
     this.productPrice = page.locator('*[class^="product-card_product-price"]');
   }
 
@@ -63,7 +61,7 @@ export class ProductListPage {
     const productListPage = new ProductListPage(this.page);
     const items = await productListPage.getListofItems();
     const len = await items.count();
-    const randomNumber = Math.floor(Math.random() * (len-1));
+    const randomNumber = Math.floor(Math.random() * (len - 1));
     const productCard: Locator = items.nth(randomNumber);
     await productCard.scrollIntoViewIfNeeded();
     const productName = await productListPage.getProductName(productCard);

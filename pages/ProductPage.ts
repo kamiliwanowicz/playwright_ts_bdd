@@ -19,9 +19,7 @@ export class ProductPage {
     this.page = page;
     this.productName = page.locator('*[class^="product-information_title"]');
     this.productFit = page.locator('*[class^="product-information_fit"]');
-    this.productColourOld = page.locator(
-      '*[class^="product-information_title"] span'
-    );
+    this.productColourOld = page.locator('*[class^="product-information_title"] span');
     this.productColour = page.locator('*[class^="variants_colour"]');
     this.productColourString = '*[class^="variants_colour"]';
     this.productPrice = page.locator('*[class^="product-information_price"]');
@@ -33,40 +31,16 @@ export class ProductPage {
     );
   }
 
-  async checkProductColour(productDetails: ProductDetails) {
-    const baseQueries = new BaseQueries(this.page);
-    if (await baseQueries.checkIfElementPresent(this.productColourString)) {
-      expect(await this.productColour.textContent()).toContain(
-        productDetails.productColour
-      );
-    } else {
-      expect(await this.productColourOld.textContent()).toContain(
-        productDetails.productColour
-      );
-    }
-  }
-
   async verifyDetailsOnProductPage(productDetails: ProductDetails) {
-    const productPage = new ProductPage(this.page);
-    expect(await this.productName.textContent()).toContain(
-      productDetails.productName
-    );
-    await productPage.checkProductColour(productDetails);
-    if (productDetails.productFit != "") {
-      expect(await this.productFit.textContent()).toContain(
-        productDetails.productFit
-      );
-    }
-    expect(await this.productPrice.textContent()).toBe(
-      productDetails.productPrice
-    );
+    await this.verifyProductName(productDetails.productName);
+    await this.verifyProductColour(productDetails.productColour);
+    await this.verifyProductFit(productDetails.productFit);
+    await this.verifyProductPrice(productDetails.productPrice);
   }
 
   async getAvailableSizes() {
     const baseQueries = new BaseQueries(this.page);
-    const sizePresent = await baseQueries.checkIfElementPresent(
-      this.sizesString
-    );
+    const sizePresent = await baseQueries.checkIfElementPresent(this.sizesString);
     if (!sizePresent) {
       return null;
     }
@@ -74,19 +48,16 @@ export class ProductPage {
     return sizes;
   }
 
-  async selectRandomSizeIfAvailable(
-    productDetails: ProductDetails
-  ): Promise<ProductDetails> {
+  async selectRandomSizeIfAvailable(productDetails: ProductDetails): Promise<ProductDetails> {
     const productPage = new ProductPage(this.page);
     const sizes = await productPage.getAvailableSizes();
     if (sizes === null) {
+      productDetails.productSize = "";
       return productDetails;
     }
     const randomNumber = Math.floor(Math.random() * (sizes.length - 1));
     const randomSize = sizes[randomNumber];
-    await this.page
-      .locator(`button[data-locator-id="pdp-size-${randomSize}-select"]`)
-      .click();
+    await this.page.locator(`div[class^="add-to-cart_sizes"] button[data-locator-id="pdp-size-${randomSize}-select"]`).click();
     productDetails.productSize = randomSize;
     return productDetails;
   }
@@ -97,5 +68,28 @@ export class ProductPage {
 
   async basektIconDisplaysNumberOfItems(numOfItems: string) {
     expect(await this.cartCount).toHaveText(numOfItems);
+  }
+
+  private async verifyProductColour(productColour: string | null) {
+    const baseQueries = new BaseQueries(this.page);
+    if (await baseQueries.checkIfElementPresent(this.productColourString)) {
+      expect(await this.productColour.textContent()).toContain(productColour);
+    } else {
+      expect(await this.productColourOld.textContent()).toContain(productColour);
+    }
+  }
+
+  private async verifyProductName(productName: string | null) {
+    expect(await this.productName.textContent()).toContain(productName);
+  }
+
+  private async verifyProductFit(productFit: string | null) {
+    if (productFit != "") {
+      expect(await this.productFit.textContent()).toContain(productFit);
+    }
+  }
+
+  private async verifyProductPrice(productPrice: string | null) {
+    expect(await this.productPrice.textContent()).toBe(productPrice);
   }
 }

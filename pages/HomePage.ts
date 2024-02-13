@@ -19,9 +19,7 @@ export class HomePage {
     this.mainMenu = page.locator("button[aria-label='Main menu']");
     this.menCategory = page.locator("span#men");
     this.womenCategory = page.locator("#women");
-    this.accessoriesCategory = page.locator(
-      '[data-locator-id="navigation-desktopLink-accessories-select"]'
-    );
+    this.accessoriesCategory = page.locator('[data-locator-id="navigation-desktopLink-accessories-select"]');
     this.menNewReleases = page.locator(
       ".undefined + a[href='https://www.gymshark.com/collections/new-releases/mens']"
     );
@@ -76,14 +74,4 @@ export class HomePage {
       );
     }
   }
-
-  // async goToMensNewReleases(type: string) {
-  //   const homePage = new HomePage(this.page);
-  //   await homePage.goToHomepage();
-  //   await homePage.clickAcceptCookies();
-  //   await homePage.goToTypeOfNewReleases(type);
-
-  //   // await homePage.goToMen();
-  //   // await homePage.clickMensNewReleases();
-  // }
 }

@@ -15,39 +15,59 @@ export class CheckoutPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.checkoutButton = page.getByRole('link', { name: 'Checkout securely ' })
-    this.discountInput = page.getByPlaceholder('Discount code or gift card')
+    this.checkoutButton = page.getByRole("link", { name: "Checkout securely " });
+    this.discountInput = page.getByPlaceholder("Discount code or gift card");
     this.productNameAndColour = page.locator('*[class^="product__description__name order-summary"]');
-    this.productFit = page.locator('.product__description > :nth-child(3)');
-    this.productSize = page.locator('.product__description__variant');
-    this.priceOneProduct = page.locator('.product__price > .order-summary__emphasis');
-    this.priceTotal = page.locator('.payment-due__price');
-    this.priceSubtotal = page.locator('.total-line--subtotal .total-line__price > .order-summary__emphasis');
+    this.productFit = page.locator(".product__description > :nth-child(3)");
+    this.productSize = page.locator(".product__description__variant");
+    this.priceOneProduct = page.locator(".product__price > .order-summary__emphasis");
+    this.priceTotal = page.locator(".payment-due__price");
+    this.priceSubtotal = page.locator(".total-line--subtotal .total-line__price > .order-summary__emphasis");
     this.bagIcon = page.locator("button[data-locator-id=header-miniBag-select]");
   }
 
-  async clickBasket() {
+  async verifyItemOnCheckoutPage(productDetails: ProductDetails) {
+    await this.clickBasket();
+    await this.clickCheckout();
+    await expect(this.discountInput).toBeVisible();
+    await this.verifyProductName(productDetails.productName);
+    await this.verifyProductColour(productDetails.productColour);
+    await this.verifyProductFit(productDetails.productFit);
+    await this.verifyProductSize(productDetails.productSize);
+    await this.verifyProductPrice(productDetails.productPrice);
+  }
+
+  private async verifyProductName(productName: string | null) {
+    expect((await this.productNameAndColour.textContent())?.replace("&quot;", '"')).toContain(productName);
+  }
+
+  private async verifyProductColour(productColour: string | null) {
+    expect(await this.productNameAndColour.textContent()).toContain(productColour);
+  }
+
+  private async verifyProductFit(productFit: string | null) {
+    if (productFit != "") {
+      expect(await this.productFit.textContent()).toBe(productFit);
+    }
+  }
+
+  private async verifyProductSize(productSize: string | null | undefined) {
+    if (productSize != "") {
+      expect((await this.productSize.textContent())?.toLowerCase()).toContain(productSize);
+    }
+  }
+
+  private async verifyProductPrice(productPrice: string | null) {
+    expect(await this.priceOneProduct.textContent()).toContain(productPrice);
+    expect(await this.priceSubtotal.textContent()).toContain(productPrice);
+    expect(await this.priceTotal.textContent()).toContain(productPrice);
+  }
+
+  private async clickBasket() {
     await this.bagIcon.click();
   }
 
-  async clickCheckout() {
+  private async clickCheckout() {
     await this.checkoutButton.click();
-  }
-
-  async verifyItemOnCheckoutPage(productDetails: ProductDetails){
-    await this.clickBasket();
-    await this.clickCheckout();
-    await expect (this.discountInput).toBeVisible()
-    expect((await this.productNameAndColour.textContent())?.replace("&quot;", '"')).toContain(productDetails.productName)
-    expect(await this.productNameAndColour.textContent()).toContain(productDetails.productColour)
-    if (productDetails.productFit != "") {
-      expect(await this.productFit.textContent()).toBe(productDetails.productFit)
-    }
-    if (productDetails.productSize != "") {
-      expect((await this.productSize.textContent())?.toLowerCase()).toContain(productDetails.productSize)
-    }
-    expect(await this.priceOneProduct.textContent()).toContain(productDetails.productPrice)
-    expect(await this.priceSubtotal.textContent()).toContain(productDetails.productPrice)
-    expect(await this.priceTotal.textContent()).toContain(productDetails.productPrice)
   }
 }
