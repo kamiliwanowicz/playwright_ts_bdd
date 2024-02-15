@@ -7,12 +7,6 @@ import {
   summaryPage,
   checkoutPage,
 } from "../../hooks/hooks";
-import { ProductDetails } from "../../../pages/ProductListPage";
-
-// var { setDefaultTimeout } = require("");
-// setDefaultTimeout(60 * 1000);
-let randomItemDetails: ProductDetails;
-// import { pageFixture } from "../../hooks/pageFixture";
 
 Given("I go to {string} New Releases", async function (type: string) {
   this.cucumberExample = type;
@@ -20,16 +14,16 @@ Given("I go to {string} New Releases", async function (type: string) {
 });
 
 Given("I select a random item", async function () {
-  randomItemDetails = await productListPage.selectRandomItem();
-  console.log(`randomItemDetails: ${Object.values(randomItemDetails)}`);
+  this.randomItemDetails = await productListPage.selectRandomItem();
+  console.log(`randomItemDetails: ${Object.values(this.randomItemDetails)}`);
 });
 
 Given("I verify details on Product page", async function () {
-  await productPage.verifyDetailsOnProductPage(randomItemDetails);
+  await productPage.verifyDetailsOnProductPage(this.randomItemDetails);
 });
 
 Given("I select a random size", async function () {
-  randomItemDetails = await productPage.selectRandomSizeIfAvailable(randomItemDetails);
+  this.randomItemDetails = await productPage.selectRandomSizeIfAvailable(this.randomItemDetails);
 });
 
 When("I add the item to the basket", async function () {
@@ -37,7 +31,7 @@ When("I add the item to the basket", async function () {
 });
 
 Then("I verify item has been added successfully to Summary page", async function () {
-  await summaryPage.verifyItemOnSummaryPage(randomItemDetails);
+  await summaryPage.verifyItemOnSummaryPage(this.randomItemDetails);
 });
 
 Then("I close the summary", async function () {
@@ -49,9 +43,9 @@ Then("I expect the basket icon to display number {string}", async function (s: s
 });
 
 Then("I verify values on Full Bag page", async function () {
-  await fullBagPage.verifyItemOnFullBagPage(randomItemDetails);
+  await fullBagPage.verifyItemOnFullBagPage(this.randomItemDetails);
 });
 
 Then("I verify values on Checkout page", async function () {
-  await checkoutPage.verifyItemOnCheckoutPage(randomItemDetails);
+  await checkoutPage.verifyItemOnCheckoutPage(this.randomItemDetails);
 });

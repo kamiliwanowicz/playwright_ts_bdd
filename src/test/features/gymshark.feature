@@ -15,5 +15,5 @@ Feature: Gym Shark website tests
     Examples: 
       | type        |
       | Women       |
-      # | Men         |
-      # | Accessories |
+      | Men         |
+      | Accessories |

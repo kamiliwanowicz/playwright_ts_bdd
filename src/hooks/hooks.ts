@@ -39,9 +39,6 @@ Before(async function () {
   productPage = new ProductPage(page);
   summaryPage = new SummaryPage(page);
   checkoutPage = new CheckoutPage(page);
-
-  // // @ts-ignore
-  // pageFixture.page = page;
 });
 
 After(async function (scenario) {

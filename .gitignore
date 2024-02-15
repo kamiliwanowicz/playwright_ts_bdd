@@ -3,3 +3,6 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/test-result/cucumber-trace/
+/test-result/report/
+/test-result/videos/
