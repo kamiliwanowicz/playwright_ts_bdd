@@ -9,7 +9,6 @@ import {
 } from "../../hooks/hooks";
 
 Given("I go to {string} New Releases", async function (type: string) {
-  this.cucumberExample = type;
   await homePage.goToNewReleases(type);
 });
 
