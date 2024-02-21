@@ -1,22 +1,12 @@
 import { After, AfterAll, Before, BeforeAll } from "@cucumber/cucumber";
 import { Browser, BrowserContext, Page, chromium, firefox, webkit } from "@playwright/test";
-import { HomePage } from "../../pages/HomePage";
-import { ProductListPage } from "../../pages/ProductListPage";
-import { FullBagPage } from "../../pages/FullBagPage";
-import { ProductPage } from "../../pages/ProductPage";
-import { SummaryPage } from "../../pages/SummaryPage";
-import { CheckoutPage } from "../../pages/CheckoutPage";
 import { browserType, headlessSetting } from "../testConfig";
+import { PagesFixture } from "../../fixtures/pagesFixture";
 
 let browser: Browser;
 let page: Page;
 let context: BrowserContext;
-let homePage: HomePage;
-let productListPage: ProductListPage;
-let fullBagPage: FullBagPage;
-let productPage: ProductPage;
-let summaryPage: SummaryPage;
-let checkoutPage: CheckoutPage;
+let pagesFixture: PagesFixture;
 
 var { setDefaultTimeout } = require("@cucumber/cucumber");
 setDefaultTimeout(60 * 1000);
@@ -39,17 +29,11 @@ Before(async function () {
   context = await browser.newContext({
     recordVideo: {
       dir: "test-result/video/",
-    }
+    },
   });
   await context.tracing.start({ screenshots: true, snapshots: true });
   page = await context.newPage();
-
-  homePage = new HomePage(page);
-  productListPage = new ProductListPage(page);
-  fullBagPage = new FullBagPage(page);
-  productPage = new ProductPage(page);
-  summaryPage = new SummaryPage(page);
-  checkoutPage = new CheckoutPage(page);
+  pagesFixture = new PagesFixture(page);
 });
 
 After(async function (scenario) {
@@ -87,4 +71,4 @@ async function saveVideo(scenarioName: string) {
   await page.video()?.delete();
 }
 
-export { page, homePage, productListPage, fullBagPage, productPage, summaryPage, checkoutPage };
+export { page, pagesFixture };

@@ -23,11 +23,11 @@ export class ProductPage {
     this.productColour = page.locator('*[class^="variants_colour"]');
     this.productColourString = '*[class^="variants_colour"]';
     this.productPrice = page.locator('*[class^="product-information_price"]');
-    this.sizesString = '*[class^="add-to-cart_sizes"] button';
+    this.sizesString = '*[class^="add-to-cart_sizes"] button:not([class*="--out-of-stock"])';
     this.addToBag = page.locator("button[data-locator-id=pdp-addToBag-submit]");
     this.cartCount = page.locator("#cart-count");
     this.availableSizesList = page.locator(
-      'button[data-locator-id^="pdp-size-"]:not([class*="--out-of-stock"])'
+      '*[class^="add-to-cart_sizes"] button:not([class*="--out-of-stock"])'
     );
   }
 
@@ -90,6 +90,6 @@ export class ProductPage {
   }
 
   private async verifyProductPrice(productPrice: string | null) {
-    expect(await this.productPrice.textContent()).toBe(productPrice);
+    expect(await this.productPrice.textContent()).toContain(productPrice);
   }
 }

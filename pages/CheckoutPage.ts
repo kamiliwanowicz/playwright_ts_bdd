@@ -15,7 +15,7 @@ export class CheckoutPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.checkoutButton = page.getByRole("link", { name: "Checkout securely " });
+    this.checkoutButton = page.getByRole("link", { name: "Checkout securely" });
     this.discountInput = page.getByPlaceholder("Discount code or gift card");
     this.productNameAndColour = page.locator('*[class^="product__description__name order-summary"]');
     this.productFit = page.locator(".product__description > :nth-child(3)");

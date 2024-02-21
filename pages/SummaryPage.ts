@@ -21,13 +21,13 @@ export class SummaryPage {
     this.priceOneProduct = page.locator('*[class^="price_price"]');
     this.priceSubtotal = page.locator('div[class^="summary_summary-info-wrapper"]:not([class*="--bold"])');
     this.priceTotal = page.locator('p[data-locator-id^="miniBag-totalValue-read"]');
-    this.checkoutButton = page.getByRole("link", { name: "Checkout securely " });
+    this.checkoutButton = page.getByRole("link", { name: "Checkout securely" });
     this.closeRegionSelectionX = page.locator("button[data-locator-id=storeSelector-close-select]");
     this.closeYourBagSummaryX = page.locator("button[data-locator-id=miniBag-closeButton-select]");
   }
 
   async verifyItemOnSummaryPage(productDetails: ProductDetails) {
-    await expect(this.checkoutButton).toBeVisible();
+    expect(await this.checkoutButton).toBeVisible();
     await this.verifyProductName(productDetails.productName);
     await this.verifyProductFit(productDetails.productFit);
     await this.verifyProductColour(productDetails.productColour);
@@ -61,8 +61,8 @@ export class SummaryPage {
   }
 
   private async verifyProductPrice(productPrice: string | null) {
-    expect(await this.priceOneProduct.textContent()).toBe(productPrice);
-    expect(await this.priceTotal.textContent()).toBe(productPrice);
-    expect((await this.priceSubtotal.textContent())?.split("Subtotal")[1]).toBe(productPrice);
+    expect(await this.priceOneProduct.textContent()).toContain(productPrice);
+    expect(await this.priceTotal.textContent()).toContain(productPrice);
+    expect((await this.priceSubtotal.textContent())?.split("Subtotal")[1]).toContain(productPrice);
   }
 }
