@@ -68,6 +68,7 @@ async function saveTraceReport(scenarioName: string) {
 async function saveVideo(scenarioName: string) {
   await page.close();
   await page.video()?.saveAs(`test-result/video/${scenarioName}.webm`);
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   await page.video()?.delete();
 }
 
