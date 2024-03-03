@@ -1,4 +1,5 @@
 import fs from "fs";
+import LoggerService from "../src/logger"
 
 export class Utils {
   static async clearDirectory(directoryPath: string) {
@@ -8,9 +9,9 @@ export class Utils {
         await fs.promises.unlink(`${directoryPath}/${file}`);
       }
 
-      console.log(`Directory ${directoryPath} cleared successfully.`);
+      LoggerService.logInfo(`Directory ${directoryPath} cleared successfully.`);
     } catch (error) {
-      console.error(`Error while clearing directory ${directoryPath}: ${error}`);
+      LoggerService.logError(`Error while clearing directory ${directoryPath}: ${error}`);
     }
   }
 }

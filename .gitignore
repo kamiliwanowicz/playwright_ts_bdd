@@ -6,3 +6,4 @@ node_modules/
 /test-result/trace/
 /test-result/html_report/
 /test-result/video/
+*.log

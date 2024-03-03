@@ -1,5 +1,7 @@
 import { Given, When, Then } from "@cucumber/cucumber";
 import { pagesFixture } from "../../hooks/hooks";
+import LoggerService from "../../logger";
+
 
 Given("I go to {string} New Releases", async function (type: string) {
   await pagesFixture.homePage.goToNewReleases(type);
@@ -15,7 +17,7 @@ Given("I go to {string} New Releases", async function (type: string) {
 Given("I select a random item", async function () {
   const product = await pagesFixture.productListPage.selectRandomItem();
   this.productList.push(product);
-  console.log(`Selected product: ${Object.values(product)}`);
+  LoggerService.logInfo(`Selected product: ${Object.values(product)}`);
 });
 
 Given("I verify details on Product page", async function () {
