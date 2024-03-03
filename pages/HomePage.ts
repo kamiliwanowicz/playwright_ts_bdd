@@ -26,7 +26,7 @@ export class HomePage {
     this.womenNewReleases = page.getByRole("link", { name: "SHOP NEW" });
     this.accessoriesNewReleasesHoverMenuOption = page
       .locator("#panel-accessories")
-      .getByRole("link", { name: "New Releases" });
+      .getByRole("link", { name: "New Product Drops" });
     this.itemsList = page.locator('*[class^="product-grid_grid"]');
   }
 

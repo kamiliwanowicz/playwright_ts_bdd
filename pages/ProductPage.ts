@@ -1,5 +1,5 @@
 import { Locator, Page, expect } from "@playwright/test";
-import { BaseQueries } from "./BaseQueries";
+import { BaseQueries, lastIndex } from "./BaseQueries";
 import { ProductDetails } from "./ProductListPage";
 
 export class ProductPage {
@@ -31,11 +31,12 @@ export class ProductPage {
     );
   }
 
-  async verifyDetailsOnProductPage(productDetails: ProductDetails) {
-    await this.verifyProductName(productDetails.productName);
-    await this.verifyProductColour(productDetails.productColour);
-    await this.verifyProductFit(productDetails.productFit);
-    await this.verifyProductPrice(productDetails.productPrice);
+  async verifyDetailsOnProductPage(productDetails: ProductDetails[]) {
+    let product = productDetails[lastIndex(productDetails)]
+    await this.verifyProductName(product.productName);
+    await this.verifyProductColour(product.productColour);
+    await this.verifyProductFit(product.productFit);
+    await this.verifyProductPrice(product.productPrice);
   }
 
   async getAvailableSizes() {
@@ -48,18 +49,19 @@ export class ProductPage {
     return sizes;
   }
 
-  async selectRandomSizeIfAvailable(productDetails: ProductDetails): Promise<ProductDetails> {
+  async selectRandomSizeIfAvailable(productDetails: ProductDetails[]): Promise<ProductDetails> {
+    let product = productDetails[lastIndex(productDetails)]
     const productPage = new ProductPage(this.page);
     const sizes = await productPage.getAvailableSizes();
     if (sizes === null) {
-      productDetails.productSize = "";
-      return productDetails;
+      product.productSize = "";
+      return product;
     }
     const randomNumber = Math.floor(Math.random() * (sizes.length - 1));
     const randomSize = sizes[randomNumber];
     await this.page.locator(`div[class^="add-to-cart_sizes"] button[data-locator-id="pdp-size-${randomSize}-select"]`).click();
-    productDetails.productSize = randomSize;
-    return productDetails;
+    product.productSize = randomSize;
+    return product;
   }
 
   async addItemToBasket() {

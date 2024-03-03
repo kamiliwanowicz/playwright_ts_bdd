@@ -1,5 +1,6 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { ProductDetails } from "./ProductListPage";
+import { lastIndex } from "./BaseQueries";
 
 export class SummaryPage {
   readonly page: Page;
@@ -26,13 +27,14 @@ export class SummaryPage {
     this.closeYourBagSummaryX = page.locator("button[data-locator-id=miniBag-closeButton-select]");
   }
 
-  async verifyItemOnSummaryPage(productDetails: ProductDetails) {
+  async verifyItemOnSummaryPage(productDetails: ProductDetails[]) {
+    const product = productDetails[lastIndex(productDetails)]
     expect(await this.checkoutButton).toBeVisible();
-    await this.verifyProductName(productDetails.productName);
-    await this.verifyProductFit(productDetails.productFit);
-    await this.verifyProductColour(productDetails.productColour);
-    await this.verifyProductSize(productDetails.productSize);
-    await this.verifyProductPrice(productDetails.productPrice);
+    await this.verifyProductName(product.productName);
+    await this.verifyProductFit(product.productFit);
+    await this.verifyProductColour(product.productColour);
+    await this.verifyProductSize(product.productSize);
+    await this.verifyProductPrice(product.productPrice);
   }
 
   async closeSummary() {

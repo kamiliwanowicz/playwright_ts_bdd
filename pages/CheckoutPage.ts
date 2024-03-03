@@ -1,5 +1,6 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { ProductDetails } from "./ProductListPage";
+import { lastIndex } from "./BaseQueries";
 
 export class CheckoutPage {
   readonly page: Page;
@@ -26,15 +27,16 @@ export class CheckoutPage {
     this.bagIcon = page.locator("button[data-locator-id=header-miniBag-select]");
   }
 
-  async verifyItemOnCheckoutPage(productDetails: ProductDetails) {
+  async verifyItemOnCheckoutPage(productDetails: ProductDetails[]) {
+    let product = productDetails[lastIndex(productDetails)]
     await this.clickBasket();
     await this.clickCheckout();
     await expect(this.discountInput).toBeVisible();
-    await this.verifyProductName(productDetails.productName);
-    await this.verifyProductColour(productDetails.productColour);
-    await this.verifyProductFit(productDetails.productFit);
-    await this.verifyProductSize(productDetails.productSize);
-    await this.verifyProductPrice(productDetails.productPrice);
+    await this.verifyProductName(product.productName);
+    await this.verifyProductColour(product.productColour);
+    await this.verifyProductFit(product.productFit);
+    await this.verifyProductSize(product.productSize);
+    await this.verifyProductPrice(product.productPrice);
   }
 
   private async verifyProductName(productName: string | null) {

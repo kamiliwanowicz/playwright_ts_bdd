@@ -1,5 +1,4 @@
-import { Locator, Page } from "@playwright/test";
-import fs from "fs";
+import { Page } from "@playwright/test";
 
 export class BaseQueries {
   readonly page: Page;
@@ -14,4 +13,8 @@ export class BaseQueries {
     }
     return false;
   }
+}
+
+export function lastIndex(list: any[]): number {
+  return list.length - 1;
 }

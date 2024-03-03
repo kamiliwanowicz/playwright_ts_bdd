@@ -1,23 +1,31 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import {
-  pagesFixture,
-} from "../../hooks/hooks";
+import { pagesFixture } from "../../hooks/hooks";
 
 Given("I go to {string} New Releases", async function (type: string) {
   await pagesFixture.homePage.goToNewReleases(type);
+  try {
+    if ((this.productList.length = 0)) {
+      this.productList = [];
+    }
+  } catch (error) {
+    this.productList = [];
+  }
 });
 
 Given("I select a random item", async function () {
-  this.randomItemDetails = await pagesFixture.productListPage.selectRandomItem();
-  console.log(`randomItemDetails: ${Object.values(this.randomItemDetails)}`);
+  const product = await pagesFixture.productListPage.selectRandomItem();
+  this.productList.push(product);
+  console.log(`Selected product: ${Object.values(product)}`);
 });
 
 Given("I verify details on Product page", async function () {
-  await pagesFixture.productPage.verifyDetailsOnProductPage(this.randomItemDetails);
+  await pagesFixture.productPage.verifyDetailsOnProductPage(this.productList);
 });
 
 Given("I select a random size", async function () {
-  this.randomItemDetails = await pagesFixture.productPage.selectRandomSizeIfAvailable(this.randomItemDetails);
+  this.productList[this.productList.length - 1] = await pagesFixture.productPage.selectRandomSizeIfAvailable(
+    this.productList
+  );
 });
 
 When("I add the item to the basket", async function () {
@@ -25,21 +33,19 @@ When("I add the item to the basket", async function () {
 });
 
 Then("I verify item has been added successfully to Summary page", async function () {
-  await pagesFixture.summaryPage.verifyItemOnSummaryPage(this.randomItemDetails);
+  await pagesFixture.summaryPage.verifyItemOnSummaryPage(this.productList);
 });
 
-Then("I close the summary", async function () {
+Then("I expect the basket icon to display a correct number", async function () {
+  let count = this.productList.length.toString();
   await pagesFixture.summaryPage.closeSummary();
-});
-
-Then("I expect the basket icon to display number {string}", async function (s: string) {
-  await pagesFixture.productPage.basektIconDisplaysNumberOfItems("1");
+  await pagesFixture.productPage.basektIconDisplaysNumberOfItems(count);
 });
 
 Then("I verify values on Full Bag page", async function () {
-  await pagesFixture.fullBagPage.verifyItemOnFullBagPage(this.randomItemDetails);
+  await pagesFixture.fullBagPage.verifyItemOnFullBagPage(this.productList);
 });
 
 Then("I verify values on Checkout page", async function () {
-  await pagesFixture.checkoutPage.verifyItemOnCheckoutPage(this.randomItemDetails);
+  await pagesFixture.checkoutPage.verifyItemOnCheckoutPage(this.productList);
 });

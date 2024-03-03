@@ -8,8 +8,7 @@ Feature: Gym Shark website tests
     And I select a random size
     When I add the item to the basket
     Then I verify item has been added successfully to Summary page
-    And I close the summary
-    And I expect the basket icon to display number "1"
+    And I expect the basket icon to display a correct number
     And I verify values on Checkout page
 
     Examples: 

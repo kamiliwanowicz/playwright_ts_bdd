@@ -1,5 +1,6 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { ProductDetails } from "./ProductListPage";
+import { lastIndex } from "./BaseQueries";
 
 export class FullBagPage {
   readonly page: Page;
@@ -38,20 +39,21 @@ export class FullBagPage {
     await this.viewFullBag.click();
   }
 
-  async verifyItemOnFullBagPage(productDetails: ProductDetails) {
+  async verifyItemOnFullBagPage(productDetails: ProductDetails[]) {
+    let product = productDetails[lastIndex(productDetails)]
     await this.clickOnBasket();
     await this.clickViewFullBag();
     expect(await this.checkoutButton).toBeVisible();
-    expect(await this.productName.textContent()).toBe(productDetails.productName);
-    expect((await this.productFit.textContent())?.toLowerCase()).toBe(productDetails.productFit);
-    expect(await this.productColourAndSize.textContent()).toContain(productDetails.productColour);
+    expect(await this.productName.textContent()).toBe(product.productName);
+    expect((await this.productFit.textContent())?.toLowerCase()).toBe(product.productFit);
+    expect(await this.productColourAndSize.textContent()).toContain(product.productColour);
     expect((await this.productColourAndSize.textContent())?.toLowerCase()).toContain(
-      productDetails.productSize
+      product.productSize
     );
-    expect(await this.priceOneProduct.textContent()).toBe(productDetails.productPrice);
+    expect(await this.priceOneProduct.textContent()).toBe(product.productPrice);
     expect((await this.priceSubtotal.textContent())?.split("Subtotal")[1]).toBe(
-      productDetails.productPrice
+      product.productPrice
     );
-    expect(await this.priceTotal.textContent()).toBe(productDetails.productPrice);
+    expect(await this.priceTotal.textContent()).toBe(product.productPrice);
   }
 }
