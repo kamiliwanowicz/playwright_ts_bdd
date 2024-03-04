@@ -1,6 +1,6 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import { pagesFixture } from "../../hooks/hooks";
-import LoggerService from "../../logger";
+import { pagesFixture } from "../../hooks/Hooks";
+import LoggerService from "../../../utils/Logger";
 
 
 Given("I go to {string} New Releases", async function (type: string) {

@@ -1,5 +1,5 @@
 import fs from "fs";
-import LoggerService from "../src/logger"
+import LoggerService from "./Logger"
 
 export class Utils {
   static async clearDirectory(directoryPath: string) {

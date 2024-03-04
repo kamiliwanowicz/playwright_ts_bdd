@@ -1,5 +1,5 @@
 import { Locator, Page, expect } from "@playwright/test";
-import { BaseQueries, lastIndex } from "./BaseQueries";
+import { BaseQueries, lastIndex } from "../utils/baseQueries";
 import { ProductDetails } from "./ProductListPage";
 
 export class ProductPage {

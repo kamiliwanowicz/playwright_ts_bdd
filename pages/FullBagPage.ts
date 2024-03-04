@@ -1,6 +1,6 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { ProductDetails } from "./ProductListPage";
-import { lastIndex } from "./BaseQueries";
+import { lastIndex } from "../utils/baseQueries";
 
 export class FullBagPage {
   readonly page: Page;
