@@ -1,7 +1,7 @@
 import { After, AfterAll, Before, BeforeAll } from "@cucumber/cucumber";
 import { Browser, BrowserContext, Page, chromium, firefox, webkit } from "@playwright/test";
-import { browserType, headlessSetting } from "../testConfig";
-import { PagesFixture } from "../../fixtures/pagesFixture";
+import { browserType, headlessSetting } from "../TestConfig";
+import { PagesFixture } from "../../fixtures/PagesFixture";
 
 let browser: Browser;
 let page: Page;
