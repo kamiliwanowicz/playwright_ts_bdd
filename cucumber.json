@@ -6,7 +6,7 @@
     },
     "require": ["src/test/steps/*.ts"],
     "requireModule": ["ts-node/register"],
-    "format": ["html:test-result/html_report/cucumber-report.html"],
+    "format": ["html:test-results/html_report/cucumber-report.html"],
     "parallel": 3,
     "retry": 0
   }

@@ -1,11 +1,10 @@
 node_modules/
-/test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-/test-result/trace/
-/test-result/html_report/
-/test-result/video/
+/test-results/trace/
+/test-results/html_report/
+/test-results/video/
 *.log
 tests copy/codesignal.test.ts
 /.pytest_cache/

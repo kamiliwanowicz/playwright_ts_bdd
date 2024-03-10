@@ -1,6 +1,6 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { ProductDetails } from "./ProductListPage";
-import { lastIndex } from "../utils/baseQueries";
+import { BaseQueries, lastIndex } from "../utils/baseQueries";
 
 export class SummaryPage {
   readonly page: Page;
@@ -13,6 +13,7 @@ export class SummaryPage {
   private readonly checkoutButton: Locator;
   private readonly closeRegionSelectionX: Locator;
   private readonly closeYourBagSummaryX: Locator;
+  private readonly closeRegionSelectionXString: string;
 
   constructor(page: Page) {
     this.page = page;
@@ -24,6 +25,7 @@ export class SummaryPage {
     this.priceTotal = page.locator('p[data-locator-id^="miniBag-totalValue-read"]');
     this.checkoutButton = page.getByRole("link", { name: "Checkout securely" });
     this.closeRegionSelectionX = page.locator("button[data-locator-id=storeSelector-close-select]");
+    this.closeRegionSelectionXString = "button[data-locator-id=storeSelector-close-select]";
     this.closeYourBagSummaryX = page.locator("button[data-locator-id=miniBag-closeButton-select]");
   }
 
@@ -38,7 +40,10 @@ export class SummaryPage {
   }
 
   async closeSummary() {
-    await this.closeRegionSelectionX.click();
+    const baseQueries = new BaseQueries(this.page);
+    if (await baseQueries.checkIfElementPresent(this.closeRegionSelectionXString)) {
+      await this.closeRegionSelectionX.click();
+    }
     await this.closeYourBagSummaryX.click();
   }
 
