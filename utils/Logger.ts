@@ -1,6 +1,6 @@
 import winston from "winston";
 
-class LoggerService {
+class Logger {
   private logger: winston.Logger;
 
   constructor() {
@@ -11,17 +11,17 @@ class LoggerService {
     });
   }
 
-  public logInfo(message: string): void {
+  public info(message: string): void {
     this.logger.info(message);
   }
 
-  public logWarning(message: string): void {
+  public warning(message: string): void {
     this.logger.warn(message);
   }
 
-  public logError(message: string): void {
+  public error(message: string): void {
     this.logger.error(message);
   }
 }
 
-export default new LoggerService();
+export default new Logger();

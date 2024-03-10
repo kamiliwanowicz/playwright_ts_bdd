@@ -2,7 +2,7 @@ import { After, AfterAll, Before, BeforeAll } from "@cucumber/cucumber";
 import { Browser, BrowserContext, Page, chromium, firefox, webkit, devices } from "@playwright/test";
 import { browserType, headlessSetting } from "../TestConfig";
 import { PagesFixture } from "../../fixtures/PagesFixture";
-import LoggerService from "../../utils/Logger";
+import Logger from "../../utils/Logger";
 
 let browser: Browser;
 let page: Page;
@@ -14,24 +14,32 @@ var { setDefaultTimeout } = require("@cucumber/cucumber");
 setDefaultTimeout(60 * 1000);
 
 BeforeAll(async function () {
-  LoggerService.logInfo(`Running om browser: ${browserType}`);
-  if (browserType === "chromium") {
-    browser = await chromium.launch({ headless: headlessSetting });
-  } else if (browserType === "Pixel 5" || browserType === "iPhone 12") {
-    browser = await chromium.launch({ headless: headlessSetting });
-    device = devices[browserType];
-  } else if (browserType === "firefox") {
-    browser = await firefox.launch({ headless: headlessSetting });
-  } else if (browserType === "webkit") {
-    browser = await webkit.launch({ headless: headlessSetting });
-  } else if (browserType === "msedge") {
-    browser = await chromium.launch({ headless: headlessSetting, channel: "msedge" });
-  } else if (browserType === "chrome") {
-    browser = await chromium.launch({ headless: headlessSetting, channel: "chrome" });
-  } else {
-    throw new Error(
-      `Wrong browserType provided: ${browserType}. Use one of the following names: chromium, firefox, webkit, chrome, msedge, Pixel 6, iPhone 12`
-    );
+  Logger.info(`Running on browser: ${browserType}`);
+  switch (browserType) {
+    case "chromium":
+      browser = await chromium.launch({ headless: headlessSetting });
+      break;
+    case "firefox":
+      browser = await firefox.launch({ headless: headlessSetting });
+      break;
+    case "webkit":
+      browser = await webkit.launch({ headless: headlessSetting });
+      break;
+    case "msedge":
+      browser = await chromium.launch({ headless: headlessSetting, channel: "msedge" });
+      break;
+    case "chrome":
+      browser = await chromium.launch({ headless: headlessSetting, channel: "chrome" });
+    default:
+      if (browserType.includes("Pixel") || browserType.includes("iPhone")) {
+        browser = await chromium.launch({ headless: headlessSetting });
+        device = devices[browserType];
+      } else {
+        throw new Error(
+          `Wrong browserType provided: ${browserType}. Use one of the following names: chromium, firefox, webkit, chrome, msedge, Pixel <version>, iPhone <version>`
+        );
+      }
+      break;
   }
 });
 
