@@ -1,4 +1,5 @@
 import { Locator, Page } from "@playwright/test";
+import { browserType } from "../src/TestConfig";
 
 export class HomePage {
   readonly page: Page;
@@ -12,14 +13,17 @@ export class HomePage {
   private readonly womenNewReleases: Locator;
   private readonly accessoriesNewReleasesHoverMenuOption: Locator;
   private readonly itemsList: Locator;
+  private readonly hamburgerMenu: Locator;
+  private readonly saleTrending: Locator;
+
 
   constructor(page: Page) {
     this.page = page;
     this.acceptCookies = page.locator("#onetrust-accept-btn-handler");
     this.mainMenu = page.locator("button[aria-label='Main menu']");
-    this.menCategory = page.locator("span#men");
-    this.womenCategory = page.locator("#women");
-    this.accessoriesCategory = page.locator('[data-locator-id="navigation-desktopLink-accessories-select"]');
+    this.menCategory = page.getByRole("link", { name: "men's sale", exact: true });
+    this.womenCategory = page.getByRole("link", { name: "women's sale", exact: true });
+    this.accessoriesCategory = page.getByRole("link", { name: "accessories sale", exact: true });
     this.menNewReleases = page.locator(
       ".undefined + a[href='https://www.gymshark.com/collections/new-releases/mens']"
     );
@@ -28,6 +32,8 @@ export class HomePage {
       .locator("#panel-accessories")
       .getByRole("link", { name: "New Releases" });
     this.itemsList = page.locator('*[class^="product-grid_grid"]');
+    this.hamburgerMenu = page.locator("button[data-locator-id=navigation-burgerMenu-select]");
+    this.saleTrending = page.locator("button[data-locator-id=navigation-subCategories-sale_trending-read]");
   }
 
   async goToHomepage() {
@@ -35,7 +41,9 @@ export class HomePage {
   }
 
   async clickAcceptCookies() {
-    await this.acceptCookies.click();
+    if (await this.acceptCookies.isVisible()) {
+      await this.acceptCookies.click();
+    }
   }
 
   async openMainMenu() {
@@ -57,17 +65,28 @@ export class HomePage {
     await this.accessoriesNewReleasesHoverMenuOption.click();
   }
 
-  async goToNewReleases(type: string) {
-    const homePage = new HomePage(this.page);
-    await homePage.goToHomepage();
-    await homePage.clickAcceptCookies();
+  async clickHamburgerMenu() {
+    await this.hamburgerMenu.click();
+  }
 
+  async clickSaleTrending() {
+    await this.saleTrending.click();
+  }
+
+  async goToNewReleases(type: string) {
+    await this.goToHomepage();
+    await this.clickAcceptCookies();
+
+    if (browserType.includes("Pixel") || browserType.includes("iPhone")) {
+      await this.clickHamburgerMenu();
+      await this.clickSaleTrending(); 
+    }
     if (type === "Men") {
-      await homePage.goToMenNewReleases();
+      await this.goToMenNewReleases();
     } else if (type === "Women") {
-      await homePage.goToWomenNewReleases();
+      await this.goToWomenNewReleases();
     } else if (type === "Accessories") {
-      await homePage.goToAccessoriesNewReleases();
+      await this.goToAccessoriesNewReleases();
     } else {
       throw new Error(
         `Please provide one of the following types: Men, Women, Accessories. Type provided: ${type}`

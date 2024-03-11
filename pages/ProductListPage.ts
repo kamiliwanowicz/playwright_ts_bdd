@@ -58,17 +58,16 @@ export class ProductListPage {
   }
 
   async selectRandomItem(): Promise<ProductDetails> {
-    const productListPage = new ProductListPage(this.page);
-    const items = await productListPage.getListofItems();
+    const items = await this.getListofItems();
     const len = await items.count();
     const randomNumber = Math.floor(Math.random() * (len - 1));
     const productCard: Locator = items.nth(randomNumber);
     await productCard.scrollIntoViewIfNeeded();
-    const productName = await productListPage.getProductName(productCard);
-    const productFit = await productListPage.getProductFit(productCard);
-    const productColour = await productListPage.getProductColour(productCard);
-    const productPrice = await productListPage.getProductPrice(productCard);
-    await productListPage.clickOnProduct(productCard);
+    const productName = await this.getProductName(productCard);
+    const productFit = await this.getProductFit(productCard);
+    const productColour = await this.getProductColour(productCard);
+    const productPrice = await this.getProductPrice(productCard);
+    await this.clickOnProduct(productCard);
 
     const productDetails: ProductDetails = {
       productName: productName,
