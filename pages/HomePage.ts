@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { browserType } from "../src/TestConfig";
+import { browserType } from "../frontend-E2E/TestConfig";
 
 export class HomePage {
   readonly page: Page;
@@ -41,9 +41,7 @@ export class HomePage {
   }
 
   async clickAcceptCookies() {
-    if (await this.acceptCookies.isVisible()) {
       await this.acceptCookies.click();
-    }
   }
 
   async openMainMenu() {

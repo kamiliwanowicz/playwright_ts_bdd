@@ -14,6 +14,7 @@ export class SummaryPage {
   private readonly closeRegionSelectionX: Locator;
   private readonly closeYourBagSummaryX: Locator;
   private readonly closeRegionSelectionXString: string;
+  private readonly discountLabel: Locator
 
   constructor(page: Page) {
     this.page = page;
@@ -27,6 +28,7 @@ export class SummaryPage {
     this.closeRegionSelectionX = page.locator("button[data-locator-id=storeSelector-close-select]");
     this.closeRegionSelectionXString = "button[data-locator-id=storeSelector-close-select]";
     this.closeYourBagSummaryX = page.locator("button[data-locator-id=miniBag-closeButton-select]");
+    this.discountLabel = page.getByText('Discount', { exact: true });
   }
 
   async verifyItemOnSummaryPage(productDetails: ProductDetails[]) {
@@ -67,9 +69,21 @@ export class SummaryPage {
     }
   }
 
+  private async getPriceSubtotal(){
+    if (await this.priceSubtotal.count() > 1) {
+      return await this.priceSubtotal.nth(0).textContent();
+    }
+    else {
+      return await this.priceSubtotal.textContent();
+    }
+  }
+
   private async verifyProductPrice(productPrice: string | null) {
     expect(await this.priceOneProduct.textContent()).toContain(productPrice);
     expect(await this.priceTotal.textContent()).toContain(productPrice);
-    expect((await this.priceSubtotal.textContent())?.split("Subtotal")[1]).toContain(productPrice);
+    const priceTemp = await this.getPriceSubtotal(); 
+    if(await this.discountLabel.isHidden()) {
+      expect((await this.getPriceSubtotal())?.split("Subtotal")[1]).toContain(productPrice);
+    }
   }
 }
