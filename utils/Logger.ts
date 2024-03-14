@@ -6,8 +6,11 @@ class Logger {
   constructor() {
     this.logger = winston.createLogger({
       level: "info",
-      format: winston.format.simple(),
-      transports: [new winston.transports.Console(), new winston.transports.File({ filename: "app.log" })],
+      format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
+      transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: "../test-results/app.log" }),
+      ],
     });
   }
 
