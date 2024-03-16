@@ -14,6 +14,11 @@ export class ProductPage {
   private readonly addToBag: Locator;
   private readonly cartCount: Locator;
   private readonly availableSizesList: Locator;
+  public readonly chatIcon: Locator;
+  public readonly discountPercentage: Locator;
+  public readonly discountedPrice: Locator;
+  public readonly allSizes: Locator;
+  public readonly needHelpPopup: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -29,10 +34,15 @@ export class ProductPage {
     this.availableSizesList = page.locator(
       '*[class^="add-to-cart_sizes"] button:not([class*="--out-of-stock"])'
     );
+    this.chatIcon = page.locator(".intercom-lightweight-app-launcher.intercom-launcher");
+    this.discountPercentage = page.locator("div[data-locator-id=pdp-productTag-sale-read]");
+    this.discountedPrice = page.locator("div[data-locator-id=pdp-compareAtValue-read]");
+    this.allSizes = page.locator("div[class^=add-to-cart_sizes]");
+    this.needHelpPopup = page.getByText("Need help?");
   }
 
   async verifyDetailsOnProductPage(productDetails: ProductDetails[]) {
-    let product = productDetails[lastIndex(productDetails)]
+    let product = productDetails[lastIndex(productDetails)];
     await this.verifyProductName(product.productName);
     await this.verifyProductColour(product.productColour);
     await this.verifyProductFit(product.productFit);
@@ -50,7 +60,7 @@ export class ProductPage {
   }
 
   async selectRandomSizeIfAvailable(productDetails: ProductDetails[]): Promise<ProductDetails> {
-    let product = productDetails[lastIndex(productDetails)]
+    let product = productDetails[lastIndex(productDetails)];
     const productPage = new ProductPage(this.page);
     const sizes = await productPage.getAvailableSizes();
     if (sizes === null) {
@@ -59,7 +69,9 @@ export class ProductPage {
     }
     const randomNumber = Math.floor(Math.random() * (sizes.length - 1));
     const randomSize = sizes[randomNumber];
-    await this.page.locator(`div[class^="add-to-cart_sizes"] button[data-locator-id="pdp-size-${randomSize}-select"]`).click();
+    await this.page
+      .locator(`div[class^="add-to-cart_sizes"] button[data-locator-id="pdp-size-${randomSize}-select"]`)
+      .click();
     product.productSize = randomSize;
     return product;
   }

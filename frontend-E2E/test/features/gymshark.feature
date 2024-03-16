@@ -1,6 +1,7 @@
 Feature: Gym Shark website tests
 
   @debug
+  @addRandomProductNewReleases
   Scenario Outline: Add a random product from New Releases for <type>
     Given I go to "<type>" New Releases
     And I select a random item

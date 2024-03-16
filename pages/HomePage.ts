@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { browserType } from "../frontend-E2E/TestConfig";
 
 export class HomePage {
@@ -15,7 +15,6 @@ export class HomePage {
   private readonly itemsList: Locator;
   private readonly hamburgerMenu: Locator;
   private readonly saleTrending: Locator;
-
 
   constructor(page: Page) {
     this.page = page;
@@ -41,7 +40,9 @@ export class HomePage {
   }
 
   async clickAcceptCookies() {
-      await this.acceptCookies.click();
+    expect(await this.acceptCookies).toBeVisible();
+    await this.acceptCookies.click();
+    expect(await this.acceptCookies).not.toBeVisible();
   }
 
   async openMainMenu() {
@@ -77,7 +78,7 @@ export class HomePage {
 
     if (browserType.includes("Pixel") || browserType.includes("iPhone")) {
       await this.clickHamburgerMenu();
-      await this.clickSaleTrending(); 
+      await this.clickSaleTrending();
     }
     if (type === "Men") {
       await this.goToMenNewReleases();

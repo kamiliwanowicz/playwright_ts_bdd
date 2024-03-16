@@ -8,3 +8,4 @@ node_modules/
 *.log
 tests copy/codesignal.test.ts
 /.pytest_cache/
+*/visual-comparison-VisualTests*/
