@@ -4,6 +4,7 @@ node_modules/
 /playwright/.cache/
 /test-results/trace/
 /test-results/html_report/
+/test-results/visual*
 /test-results/video/
 *.log
 tests copy/codesignal.test.ts

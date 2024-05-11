@@ -2,31 +2,25 @@ import { Locator, Page, expect } from "@playwright/test";
 import { browserType } from "../frontend-E2E/TestConfig";
 
 export class HomePage {
-  constructor(private readonly page: Page) {}
+  constructor(private page: Page) {}
 
-  private readonly url_ = "https://www.gymshark.com/";
-  private readonly acceptCookies: Locator = this.page.locator("#onetrust-accept-btn-handler");
-  private readonly mainMenu: Locator = this.page.locator("button[aria-label='Main menu']");
-  private readonly menCategory: Locator = this.page.getByRole("link", { name: "men's sale", exact: true });
-  private readonly womenCategory: Locator = this.page.getByRole("link", {
-    name: "women's sale",
-    exact: true,
-  });
-  private readonly accessoriesCategory: Locator = this.page.getByRole("link", {
-    name: "accessories sale",
-    exact: true,
-  });
-  private readonly menNewReleases: Locator = this.page.locator(
+  url_ = "https://www.gymshark.com/";
+  acceptCookies: Locator = this.page.locator("#onetrust-accept-btn-handler");
+  mainMenu: Locator = this.page.locator("button[aria-label='Main menu']");
+  menCategory = this.page.locator("span#men");
+  womenCategory = this.page.getByRole("link", { name: "women", exact: true });
+  accessoriesCategory = this.page.locator('[data-locator-id="navigation-desktopLink-accessories-select"]');
+  menNewReleases: Locator = this.page.locator(
     ".undefined + a[href='https://www.gymshark.com/collections/new-releases/mens']"
   );
-  private readonly womenNewReleases: Locator = this.page.getByRole("link", { name: "SHOP NEW" });
-  private readonly accessoriesNewReleasesHoverMenuOption: Locator = this.page
+  womenNewReleases: Locator = this.page
+    .locator('[id="panel-women\\ "]')
+    .getByRole("link", { name: "New Releases" });
+  accessoriesNewReleasesHoverMenuOption: Locator = this.page
     .locator("#panel-accessories")
     .getByRole("link", { name: "New Releases" });
-  private readonly hamburgerMenu: Locator = this.page.locator(
-    "button[data-locator-id=navigation-burgerMenu-select]"
-  );
-  private readonly saleTrending: Locator = this.page.locator(
+  hamburgerMenu: Locator = this.page.locator("button[data-locator-id=navigation-burgerMenu-select]");
+  saleTrending: Locator = this.page.locator(
     "button[data-locator-id=navigation-subCategories-sale_trending-read]"
   );
 
@@ -35,9 +29,9 @@ export class HomePage {
   }
 
   async clickAcceptCookies() {
-    expect(await this.acceptCookies).toBeVisible();
+    await expect(this.acceptCookies).toBeVisible();
     await this.acceptCookies.click();
-    expect(await this.acceptCookies).not.toBeVisible();
+    await expect(this.acceptCookies).not.toBeVisible();
   }
 
   async openMainMenu() {
@@ -50,7 +44,7 @@ export class HomePage {
   }
 
   async goToWomenNewReleases() {
-    await this.womenCategory.click();
+    await this.womenCategory.hover();
     await this.womenNewReleases.click();
   }
 

@@ -1,45 +1,26 @@
 import { Locator, Page, expect } from "@playwright/test";
-import { BaseQueries, lastIndex } from "../utils/BaseQueries";
+import { BaseQueries, lastIndex } from "../utils/baseQueries";
 import { ProductDetails } from "./ProductListPage";
 
 export class ProductPage {
-  readonly page: Page;
-  private readonly productName: Locator;
-  private readonly productFit: Locator;
-  private readonly productColourOld: Locator;
-  private readonly productColourString: string;
-  private readonly productColour: Locator;
-  private readonly productPrice: Locator;
-  private readonly sizesString: string;
-  private readonly addToBag: Locator;
-  private readonly cartCount: Locator;
-  private readonly availableSizesList: Locator;
-  public readonly chatIcon: Locator;
-  public readonly discountPercentage: Locator;
-  public readonly discountedPrice: Locator;
-  public readonly allSizes: Locator;
-  public readonly needHelpPopup: Locator;
-
-  constructor(page: Page) {
-    this.page = page;
-    this.productName = page.locator('*[class^="product-information_title"]');
-    this.productFit = page.locator('*[class^="product-information_fit"]');
-    this.productColourOld = page.locator('*[class^="product-information_title"] span');
-    this.productColour = page.locator('*[class^="variants_colour"]');
-    this.productColourString = '*[class^="variants_colour"]';
-    this.productPrice = page.locator('*[class^="product-information_price"]');
-    this.sizesString = '*[class^="add-to-cart_sizes"] button:not([class*="--out-of-stock"])';
-    this.addToBag = page.locator("button[data-locator-id=pdp-addToBag-submit]");
-    this.cartCount = page.locator("#cart-count");
-    this.availableSizesList = page.locator(
-      '*[class^="add-to-cart_sizes"] button:not([class*="--out-of-stock"])'
-    );
-    this.chatIcon = page.locator(".intercom-lightweight-app-launcher.intercom-launcher");
-    this.discountPercentage = page.locator("div[data-locator-id=pdp-productTag-sale-read]");
-    this.discountedPrice = page.locator("div[data-locator-id=pdp-compareAtValue-read]");
-    this.allSizes = page.locator("div[class^=add-to-cart_sizes]");
-    this.needHelpPopup = page.getByText("Need help?");
-  }
+  constructor(private page: Page) {}
+  productName = this.page.locator('*[class^="product-information_title"]');
+  productFit = this.page.locator('*[class^="product-information_fit"]');
+  productColourOld = this.page.locator('*[class^="product-information_title"] span');
+  productColour = this.page.locator('*[class^="variants_colour"]');
+  productColourString = '*[class^="variants_colour"]';
+  productPrice = this.page.locator('*[class^="product-information_price"]');
+  sizesString = '*[class^="add-to-cart_sizes"] button:not([class*="--out-of-stock"])';
+  addToBag = this.page.locator("button[data-locator-id=pdp-addToBag-submit]");
+  cartCount = this.page.locator("#cart-count");
+  availableSizesList = this.page.locator(
+    '*[class^="add-to-cart_sizes"] button:not([class*="--out-of-stock"])'
+  );
+  chatIcon = this.page.locator(".intercom-lightweight-app-launcher.intercom-launcher");
+  discountPercentage = this.page.locator("div[data-locator-id=pdp-productTag-sale-read]");
+  discountedPrice = this.page.locator("div[data-locator-id=pdp-compareAtValue-read]");
+  allSizes = this.page.locator("div[class^=add-to-cart_sizes]");
+  needHelpPopup = this.page.getByText("Need help?");
 
   async verifyDetailsOnProductPage(productDetails: ProductDetails[]) {
     let product = productDetails[lastIndex(productDetails)];

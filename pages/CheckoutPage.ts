@@ -1,34 +1,21 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { ProductDetails } from "./ProductListPage";
-import { lastIndex } from "../utils/BaseQueries";
+import { lastIndex } from "../utils/baseQueries";
 
 export class CheckoutPage {
-  readonly page: Page;
-  private readonly checkoutButton: Locator;
-  private readonly discountInput: Locator;
-  private readonly productNameAndColour: Locator;
-  private readonly productFit: Locator;
-  private readonly productSize: Locator;
-  private readonly priceOneProduct: Locator;
-  private readonly priceTotal: Locator;
-  private readonly priceSubtotal: Locator;
-  private readonly bagIcon: Locator;
-
-  constructor(page: Page) {
-    this.page = page;
-    this.checkoutButton = page.getByRole("link", { name: "Checkout securely" });
-    this.discountInput = page.getByPlaceholder("Discount code or gift card");
-    this.productNameAndColour = page.locator('*[class^="product__description__name order-summary"]');
-    this.productFit = page.locator(".product__description > :nth-child(3)");
-    this.productSize = page.locator(".product__description__variant");
-    this.priceOneProduct = page.locator(".product__price > .order-summary__emphasis");
-    this.priceTotal = page.locator(".payment-due__price");
-    this.priceSubtotal = page.locator(".total-line--subtotal .total-line__price > .order-summary__emphasis");
-    this.bagIcon = page.locator("button[data-locator-id=header-miniBag-select]");
-  }
+  constructor(private page: Page) {}
+  checkoutButton = this.page.getByRole("link", { name: "Checkout securely" });
+  discountInput = this.page.getByPlaceholder("Discount code or gift card");
+  productNameAndColour = this.page.locator('*[class^="product__description__name order-summary"]');
+  productFit = this.page.locator(".product__description > :nth-child(3)");
+  productSize = this.page.locator(".product__description__variant");
+  priceOneProduct = this.page.locator(".product__price > .order-summary__emphasis");
+  priceTotal = this.page.locator(".payment-due__price");
+  priceSubtotal = this.page.locator(".total-line--subtotal .total-line__price > .order-summary__emphasis");
+  bagIcon = this.page.locator("button[data-locator-id=header-miniBag-select]");
 
   async verifyItemOnCheckoutPage(productDetails: ProductDetails[]) {
-    let product = productDetails[lastIndex(productDetails)]
+    let product = productDetails[lastIndex(productDetails)];
     await this.clickBasket();
     await this.clickCheckout();
     await expect(this.discountInput).toBeVisible();

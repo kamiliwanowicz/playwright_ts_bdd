@@ -9,21 +9,12 @@ export interface ProductDetails {
 }
 
 export class ProductListPage {
-  readonly page: Page;
-  private readonly itemsList: Locator;
-  private readonly productTitle: Locator;
-  private readonly productFit: Locator;
-  private readonly productColour: Locator;
-  private readonly productPrice: Locator;
-
-  constructor(page: Page) {
-    this.page = page;
-    this.itemsList = page.locator('*[class^="product-grid_grid"] article');
-    this.productTitle = page.locator('*[class^="product-card_product-title"]');
-    this.productFit = page.locator('*[class^="product-card_product-fit"]');
-    this.productColour = page.locator('*[class^="product-card_product-colour"]');
-    this.productPrice = page.locator('*[class^="product-card_product-price"]');
-  }
+  constructor(private page: Page) {}
+  itemsList = this.page.locator('*[class^="product-grid_grid"] article');
+  productTitle = this.page.locator('*[class^="product-card_product-title"] h4');
+  productFit = this.page.locator('*[class^="product-card_product-fit"]');
+  productColour = this.page.locator('*[class^="product-card_product-colour"]');
+  productPrice = this.page.locator('*[class^="product-card_product-price"]');
 
   async getListofItems() {
     await expect(this.itemsList.last()).toBeVisible();

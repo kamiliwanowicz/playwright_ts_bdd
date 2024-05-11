@@ -12,7 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "@cucumber/cucumber": "^10.3.1",
-    "@playwright/test": "^1.41.0",
+    "@playwright/test": "^1.43.1",
     "@types/node": "^20.11.5",
     "@types/winston": "^2.4.4",
     "ts-node": "^10.9.2",
